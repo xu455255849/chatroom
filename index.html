@@ -7,8 +7,11 @@
             margin: 0;
             padding: 0;
         }
-        #message div{
-            height: 60%
+        .message {
+            overflow: auto;
+            height: 550px;
+            display: block;
+            
         }
 
        
@@ -25,7 +28,7 @@
             width:100%;
             
             background-color:#fff;
-            height: 100px;
+            height: 50px;
         }
         .input input {
             
@@ -113,15 +116,16 @@
             </div>
         </div>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+   
     <script>
       
      
 
   (function () {
     var d = document;
+    var msgdiv = d.getElementById('message');
     
-    
+    //构造客户端对象 通过init函数实例化对象
     window.CHAT = {
         msgObj:d.getElementById("message"),
         username:null,
@@ -129,6 +133,9 @@
         socket:null,
       
         
+        scrollToBottom:function() {
+            msgdiv.scrollTop = msgdiv.scrollHeight;
+        },
         //退出，本例只是一个简单的刷新
         logout:function(){
             //this.socket.disconnect();
@@ -180,7 +187,8 @@
             var section = d.createElement('section');
             section.className = 'sys-section';
             section.innerHTML = html;
-            this.msgObj.appendChild(section);   
+            this.msgObj.appendChild(section);  
+            this.scrollToBottom(); 
             
         },
         //第一个界面用户提交用户名
@@ -203,7 +211,7 @@
             this.username = username;
             
             d.getElementById("showusername").innerHTML = this.username;
-            //this.msgObj.style.minHeight = (this.screenheight - db.clientHeight + this.msgObj.clientHeight) + "px";
+           
             
             
             //连接websocket后端服务器
@@ -237,6 +245,7 @@
                    
                 
                 CHAT.msgObj.appendChild(section);
+                CHAT.scrollToBottom(); 
                  
             });
 
